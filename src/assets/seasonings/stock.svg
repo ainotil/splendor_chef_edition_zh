@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="高汤">
+<defs>
+  <filter id="wc" x="-20%" y="-20%" width="140%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="41" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" result="d"/>
+    <feGaussianBlur in="d" stdDeviation="0.5" result="b"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="7" result="grain"/>
+    <feColorMatrix in="grain" type="saturate" values="0" result="gray"/>
+    <feComponentTransfer in="gray" result="paper">
+      <feFuncR type="linear" slope="0.35" intercept="0.72"/>
+      <feFuncG type="linear" slope="0.35" intercept="0.72"/>
+      <feFuncB type="linear" slope="0.35" intercept="0.72"/>
+    </feComponentTransfer>
+    <feComposite in="paper" in2="b" operator="in" result="paperIn"/>
+    <feBlend in="b" in2="paperIn" mode="multiply"/>
+  </filter>
+  <filter id="splash" x="-30%" y="-30%" width="160%" height="160%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="4" seed="41" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="38" xChannelSelector="R" yChannelSelector="G" result="d"/>
+    <feGaussianBlur in="d" stdDeviation="2"/>
+  </filter>
+</defs>
+  <circle cx="100" cy="108" r="72" fill="#f6e3b0" opacity=".45" filter="url(#splash)"/>
+  <g filter="url(#wc)" stroke-linejoin="round">
+
+    <!-- 热气 -->
+    <g fill="none" stroke="#c9b48a" stroke-width="4" stroke-linecap="round" opacity=".8">
+      <path d="M78,52 C70,42 86,34 78,22"/>
+      <path d="M100,46 C92,34 108,26 100,12"/>
+      <path d="M122,52 C114,42 130,34 122,22"/>
+    </g>
+    <!-- 锅盖 -->
+    <path d="M52,80 C56,58 144,58 148,80 Z" fill="#e2b13c" stroke="#8a6418" stroke-width="2.5"/>
+    <ellipse cx="100" cy="58" rx="11" ry="7" fill="#c8372d" stroke="#8f2219" stroke-width="2.2"/>
+    <path d="M70,72 C80,66 96,64 110,65" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".5"/>
+    <!-- 锅身 -->
+    <rect x="44" y="78" width="112" height="12" rx="6" fill="#c9952a" stroke="#8a6418" stroke-width="2.5"/>
+    <path d="M52,90 L148,90 C150,138 136,170 100,172 C64,170 50,138 52,90 Z" fill="#e8b84a" stroke="#8a6418" stroke-width="2.5"/>
+    <path d="M62,100 C62,126 70,146 84,158" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".4"/>
+    <!-- 把手 -->
+    <path d="M52,98 C34,96 32,118 50,118" fill="none" stroke="#8a6418" stroke-width="6" stroke-linecap="round"/>
+    <path d="M148,98 C166,96 168,118 150,118" fill="none" stroke="#8a6418" stroke-width="6" stroke-linecap="round"/>
+
+  <g class="face">
+    <ellipse cx="83.9" cy="137.2" rx="6.8999999999999995" ry="4.0249999999999995" fill="#ff8f8f" opacity=".55"/>
+    <ellipse cx="116.1" cy="137.2" rx="6.8999999999999995" ry="4.0249999999999995" fill="#ff8f8f" opacity=".55"/>
+    <circle cx="89.65" cy="128" r="4.14" fill="#2b1d16"/>
+    <circle cx="110.35" cy="128" r="4.14" fill="#2b1d16"/>
+    <circle cx="91.03" cy="126.505" r="1.38" fill="#fff"/>
+    <circle cx="111.72999999999999" cy="126.505" r="1.38" fill="#fff"/>
+    <path d="M94.25,136.05 Q100,141.8 105.75,136.05"
+          fill="none" stroke="#2b1d16" stroke-width="2.53" stroke-linecap="round"/>
+  </g>
+  </g>
+</svg>

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="花椒">
+<defs>
+  <filter id="wc" x="-20%" y="-20%" width="140%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="31" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" result="d"/>
+    <feGaussianBlur in="d" stdDeviation="0.5" result="b"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="7" result="grain"/>
+    <feColorMatrix in="grain" type="saturate" values="0" result="gray"/>
+    <feComponentTransfer in="gray" result="paper">
+      <feFuncR type="linear" slope="0.35" intercept="0.72"/>
+      <feFuncG type="linear" slope="0.35" intercept="0.72"/>
+      <feFuncB type="linear" slope="0.35" intercept="0.72"/>
+    </feComponentTransfer>
+    <feComposite in="paper" in2="b" operator="in" result="paperIn"/>
+    <feBlend in="b" in2="paperIn" mode="multiply"/>
+  </filter>
+  <filter id="splash" x="-30%" y="-30%" width="160%" height="160%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="4" seed="31" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="38" xChannelSelector="R" yChannelSelector="G" result="d"/>
+    <feGaussianBlur in="d" stdDeviation="2"/>
+  </filter>
+</defs>
+  <circle cx="100" cy="108" r="72" fill="#d4ebbf" opacity=".45" filter="url(#splash)"/>
+  <g filter="url(#wc)" stroke-linejoin="round">
+
+    <!-- 枝和叶 -->
+    <path d="M100,34 C100,58 99,78 100,96" fill="none" stroke="#5b4a2a" stroke-width="4" stroke-linecap="round"/>
+    <path d="M100,56 C80,34 54,40 42,56 C58,68 84,68 100,56 Z" fill="#86bb55" stroke="#3f6a26" stroke-width="2.2"/>
+    <path d="M48,56 C64,56 82,56 96,56" stroke="#3f6a26" stroke-width="1.5" fill="none" opacity=".7"/>
+    <path d="M100,62 C120,40 148,44 160,60 C142,72 116,72 100,62 Z" fill="#7aae4c" stroke="#3f6a26" stroke-width="2.2"/>
+    <path d="M106,62 C122,61 140,61 154,60" stroke="#3f6a26" stroke-width="1.5" fill="none" opacity=".7"/>
+    <!-- 花椒粒 -->
+    <g stroke="#2f5f22" stroke-width="2">
+      <circle cx="74" cy="104" r="16" fill="#5f9e40"/>
+      <circle cx="128" cy="102" r="16" fill="#5f9e40"/>
+      <circle cx="64" cy="138" r="15" fill="#4f8c34"/>
+      <circle cx="138" cy="136" r="15" fill="#4f8c34"/>
+      <circle cx="80" cy="166" r="14" fill="#4f8c34"/>
+      <circle cx="122" cy="166" r="14" fill="#4f8c34"/>
+      <circle cx="100" cy="130" r="26" fill="#69aa48"/>
+    </g>
+    <g fill="#2f5f22" opacity=".55">
+      <circle cx="70" cy="98" r="1.8"/><circle cx="80" cy="108" r="1.6"/><circle cx="68" cy="110" r="1.4"/>
+      <circle cx="124" cy="96" r="1.8"/><circle cx="134" cy="106" r="1.6"/>
+      <circle cx="60" cy="134" r="1.6"/><circle cx="68" cy="144" r="1.5"/>
+      <circle cx="142" cy="132" r="1.6"/><circle cx="134" cy="142" r="1.5"/>
+      <circle cx="78" cy="162" r="1.5"/><circle cx="124" cy="170" r="1.5"/>
+      <circle cx="84" cy="122" r="1.6"/><circle cx="116" cy="146" r="1.6"/><circle cx="114" cy="116" r="1.4"/>
+    </g>
+    <g fill="#fff" opacity=".45">
+      <circle cx="68" cy="98" r="4"/><circle cx="122" cy="96" r="4"/><circle cx="88" cy="114" r="6"/>
+    </g>
+
+  <g class="face">
+    <ellipse cx="83.9" cy="139.2" rx="6.8999999999999995" ry="4.0249999999999995" fill="#ff8f8f" opacity=".55"/>
+    <ellipse cx="116.1" cy="139.2" rx="6.8999999999999995" ry="4.0249999999999995" fill="#ff8f8f" opacity=".55"/>
+    <circle cx="89.65" cy="130" r="4.14" fill="#2b1d16"/>
+    <circle cx="110.35" cy="130" r="4.14" fill="#2b1d16"/>
+    <circle cx="91.03" cy="128.505" r="1.38" fill="#fff"/>
+    <circle cx="111.72999999999999" cy="128.505" r="1.38" fill="#fff"/>
+    <path d="M94.25,138.05 Q100,143.8 105.75,138.05"
+          fill="none" stroke="#2b1d16" stroke-width="2.53" stroke-linecap="round"/>
+  </g>
+  </g>
+</svg>

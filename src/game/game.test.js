@@ -1,13 +1,14 @@
 import { describe, it, expect } from 'vitest';
 import { Client } from 'boardgame.io/client';
 import { ChefsTableNoDraft as ChefsTable } from './game.js';
-import { COLORS } from './constants.js';
+import { hotseat } from './testing.js';
+import { COLORS, RULES, rulesFor } from './constants.js';
 import { RECIPES } from './data/recipes.js';
 import { CHEFS } from './data/chefs.js';
 import { bonuses, score, refill } from './state.js';
 
 function newGame(seed = 'test') {
-  const client = Client({ game: { ...ChefsTable, seed }, numPlayers: 5 });
+  const client = Client({ game: hotseat(ChefsTable, seed), numPlayers: 5 });
   return client.getState().G;
 }
 
@@ -99,9 +100,35 @@ describe('helpers', () => {
 });
 describe('player count', () => {
   it.each([2, 3, 4, 5])('%i 人局：每人一张家常菜可选，玩家数正确', (numPlayers) => {
-    const client = Client({ game: { ...ChefsTable, seed: 'test' }, numPlayers });
+    const client = Client({ game: hotseat(ChefsTable), numPlayers });
     const { G } = client.getState();
     expect(Object.keys(G.players)).toHaveLength(numPlayers);
     expect(G.starters).toHaveLength(numPlayers);
+  });
+
+  it.each([2, 3, 4, 5])('%i 人局：桌面调味、高汤、主厨按人数摆放', (numPlayers) => {
+    const rules = rulesFor(numPlayers);
+    const { G } = Client({ game: hotseat(ChefsTable), numPlayers }).getState();
+    expect(G.rules).toEqual(rules);
+    for (const c of COLORS) expect(G.bank[c]).toBe(rules.seasoning);
+    expect(G.bank.stock).toBe(rules.stock);
+    expect(G.chefs.filter(c => c.side === 'angel')).toHaveLength(rules.chefs.angel);
+    expect(G.chefs.filter(c => c.side === 'devil')).toHaveLength(rules.chefs.devil);
+  });
+
+  it('每种人数的数值都满足推导里的不变量', () => {
+    for (const [n, r] of Object.entries(RULES).map(([n, r]) => [Number(n), r])) {
+      expect(r.seasoning).toBe(2 * n);                         // 人均每色 2.0
+      expect(5 * r.seasoning - n * r.fridge).toBe(2 * n);      // 冰箱塞满后桌面保底 20%
+      expect(r.stock).toBe(n + 2);                             // 高汤 N + 2
+      expect(r.chefs.angel + r.chefs.devil).toBe(n + 1);       // 主厨 N + 1
+      expect(r.seatBonus).toHaveLength(n);
+      expect(r.seatBonus).toHaveLength(n);
+      expect(r.seatBonus[0]).toBe(0);                          // 先手不补偿
+    }
+  });
+
+  it('不支持的人数直接报错', () => {
+    expect(() => rulesFor(6)).toThrow();
   });
 });

@@ -1,0 +1,17 @@
+# Render 上的联网服务器（免费方案）。在 Render 里选 "New → Blueprint" 指向这个仓库即可。
+# 免费方案 15 分钟没人连就会休眠，下次有人打开大厅时要等半分钟左右醒来；休眠会清空进行中的房间。
+services:
+  - type: web
+    name: chefs-table-server
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm run server
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: API_SECRET          # 房间密码：在 Render 后台自己填，不写进仓库
+        sync: false
+      - key: ALLOWED_ORIGINS     # 允许连接的网页（GitHub Pages 地址）
+        value: https://ainotil.github.io

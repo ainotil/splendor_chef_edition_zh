@@ -15,18 +15,43 @@ const SWEET_SOUR = ['sugar', 'sugar', 'sugar', 'vinegar', 'vinegar', 'vinegar'];
 const SOY_PEPPER = ['soy', 'soy', 'soy', 'peppercorn', 'peppercorn', 'peppercorn'];
 
 describe('主厨到来', () => {
-  it('满足 1 位：回合结束时自动获得，主厨离开桌面', () => {
+  it('满足 1 位：不自动给，进入选择环节；选了才入手，主厨离开桌面', () => {
     const client = clientWith(G => {
       G.chefs = [chef('angel-dessert'), chef('angel-stew')];
       giveCards(G, SWEET_SOUR);
     });
     client.moves.takeTwo('soy');
+    expect(client.getState().ctx.activePlayers).toEqual({ '0': 'chooseChef' });
+    expect(client.getState().G.players['0'].chefs).toHaveLength(0);
+
+    client.moves.chooseChef('angel-dessert');
     const { G, ctx } = client.getState();
 
     expect(G.players['0'].chefs.map(c => c.id)).toEqual(['angel-dessert']);
     expect(G.chefs.map(c => c.id)).toEqual(['angel-stew']);
     expect(score(G.players['0'])).toBe(3);
     expect(ctx.currentPlayer).toBe('1');
+  });
+
+  it('可以不请：主厨留在桌上，直接结束回合', () => {
+    const client = clientWith(G => {
+      G.chefs = [chef('angel-dessert')];
+      giveCards(G, SWEET_SOUR);
+    });
+    client.moves.takeTwo('soy');
+    client.moves.skipChef();
+    const { G, ctx } = client.getState();
+
+    expect(G.players['0'].chefs).toHaveLength(0);
+    expect(G.chefs.map(c => c.id)).toEqual(['angel-dessert']);
+    expect(ctx.currentPlayer).toBe('1');
+    expect(ctx.activePlayers).toBeNull();
+  });
+
+  it('不在选主厨环节时不能"不请"', () => {
+    const client = clientWith(G => { G.chefs = [chef('angel-dessert')]; });
+    client.moves.skipChef();
+    expect(client.getState().ctx.currentPlayer).toBe('0');
   });
 
   it('只看折扣，手里的调味再多也不算', () => {
@@ -75,6 +100,7 @@ describe('主厨到来', () => {
     client.moves.chooseChef('angel-stew');
     for (const c of ['soy', 'vinegar', 'peppercorn', 'sugar']) client.moves.takeTwo(c);   // 玩家 1–4
     client.moves.takeThree(['sugar', 'soy', 'chili']);   // 又轮到玩家 0
+    client.moves.chooseChef('angel-dessert');
 
     const names = client.getState().G.players['0'].chefs.map(c => c.id);
     expect(names).toEqual(['angel-stew', 'angel-dessert']);
@@ -92,6 +118,8 @@ describe('主厨到来', () => {
     expect(client.getState().G.players['0'].chefs).toHaveLength(0);
 
     client.moves.discard('chili');
+    expect(client.getState().ctx.activePlayers).toEqual({ '0': 'chooseChef' });
+    client.moves.chooseChef('angel-dessert');
     const { G, ctx } = client.getState();
     expect(G.players['0'].chefs.map(c => c.id)).toEqual(['angel-dessert']);
     expect(ctx.currentPlayer).toBe('1');

@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { Client } from 'boardgame.io/client';
 import { ChefsTableNoDraft as ChefsTable } from './game.js';
+import { hotseat } from './testing.js';
 
 function newClient() {
-  return Client({ game: { ...ChefsTable, seed: 'test' }, numPlayers: 5 });
+  return Client({ game: hotseat(ChefsTable), numPlayers: 5 });
 }
 
 describe('takeThree', () => {

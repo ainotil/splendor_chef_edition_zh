@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="醋">
+<defs>
+  <filter id="wc" x="-20%" y="-20%" width="140%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="17" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" result="d"/>
+    <feGaussianBlur in="d" stdDeviation="0.5" result="b"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="7" result="grain"/>
+    <feColorMatrix in="grain" type="saturate" values="0" result="gray"/>
+    <feComponentTransfer in="gray" result="paper">
+      <feFuncR type="linear" slope="0.35" intercept="0.72"/>
+      <feFuncG type="linear" slope="0.35" intercept="0.72"/>
+      <feFuncB type="linear" slope="0.35" intercept="0.72"/>
+    </feComponentTransfer>
+    <feComposite in="paper" in2="b" operator="in" result="paperIn"/>
+    <feBlend in="b" in2="paperIn" mode="multiply"/>
+  </filter>
+  <filter id="splash" x="-30%" y="-30%" width="160%" height="160%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="4" seed="17" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="38" xChannelSelector="R" yChannelSelector="G" result="d"/>
+    <feGaussianBlur in="d" stdDeviation="2"/>
+  </filter>
+</defs>
+  <circle cx="100" cy="108" r="72" fill="#c6d9f0" opacity=".45" filter="url(#splash)"/>
+  <g filter="url(#wc)" stroke-linejoin="round">
+
+    <!-- 醋坛子 -->
+    <path d="M72,72 C48,92 46,150 70,172 Q100,186 130,172 C154,150 152,92 128,72 Z"
+          fill="#3d6dab" stroke="#1f3f74" stroke-width="2.5"/>
+    <path d="M62,108 C60,128 64,146 74,160" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".35"/>
+    <rect x="76" y="60" width="48" height="16" rx="6" fill="#2f5d9e" stroke="#1f3f74" stroke-width="2.2"/>
+    <!-- 封口布 + 红绳 -->
+    <path d="M68,62 C70,36 130,36 132,62 Q100,72 68,62 Z" fill="#f1e2c4" stroke="#b48a52" stroke-width="2.2"/>
+    <path d="M72,61 Q100,70 128,61" fill="none" stroke="#d64236" stroke-width="4" stroke-linecap="round"/>
+    <path d="M126,62 C134,70 136,78 132,84 M126,62 C122,72 124,80 128,84" fill="none" stroke="#d64236" stroke-width="3" stroke-linecap="round"/>
+    <!-- 红纸菱形标签 -->
+    <polygon points="100,84 120,104 100,124 80,104" fill="#d9433a" stroke="#8f2219" stroke-width="2"/>
+    <text x="100" y="110" text-anchor="middle" font-size="16" font-weight="800" fill="#fff4dc"
+          font-family="'PingFang SC','Microsoft YaHei',sans-serif">醋</text>
+
+  <g class="face">
+    <ellipse cx="84.6" cy="155.8" rx="6.6000000000000005" ry="3.8500000000000005" fill="#ff8f8f" opacity=".55"/>
+    <ellipse cx="115.4" cy="155.8" rx="6.6000000000000005" ry="3.8500000000000005" fill="#ff8f8f" opacity=".55"/>
+    <circle cx="90.1" cy="147" r="3.9600000000000004" fill="#14233d"/>
+    <circle cx="109.9" cy="147" r="3.9600000000000004" fill="#14233d"/>
+    <circle cx="91.41999999999999" cy="145.57" r="1.32" fill="#fff"/>
+    <circle cx="111.22" cy="145.57" r="1.32" fill="#fff"/>
+    <path d="M94.5,154.7 Q100,160.2 105.5,154.7"
+          fill="none" stroke="#14233d" stroke-width="2.4200000000000004" stroke-linecap="round"/>
+  </g>
+  </g>
+</svg>

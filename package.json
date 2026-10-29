@@ -10,7 +10,9 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "npm run lint && npm test && npm run build"
+    "check": "npm run lint && npm test && npm run build",
+    "simulate": "node --import ./scripts/bgio-resolve.mjs scripts/simulate.js",
+    "server": "node --import ./scripts/bgio-resolve.mjs server/index.js"
   },
   "dependencies": {
     "boardgame.io": "^0.50.2",

@@ -41,62 +41,14 @@ describe('payment（纯计算）', () => {
     expect(payment(p, mapo)).toMatchObject({ soy: 3, chili: 2, vinegar: 0, stock: 0 });
   });
 
-  // 北京烤鸭：糖 3 + 辣椒 3 + 醋 2
-  const duck2 = { id: 'D', tier: 3, bonus: 'soy', points: 4, cost: { sugar: 3, chili: 3, vinegar: 2 } };
-  const lotsOfBonus = ['sugar', 'sugar', 'sugar', 'chili', 'chili', 'chili', 'vinegar', 'vinegar'];
-
-  it('招牌菜：正常付了 3 个以上调味，不用额外付', () => {
-    const p = player({ tokens: { sugar: 3, chili: 3, vinegar: 2 } });
-    expect(payment(p, duck2)).toMatchObject({ sugar: 3, chili: 3, vinegar: 2, stock: 0 });
+  it('三级菜和其他菜一样付：折扣全抵掉就免费', () => {
+    const p = player({ bonus: ['sugar', 'sugar', 'sugar'] });
+    expect(payment(p, duck)).toMatchObject({ sugar: 0, stock: 0 });
   });
 
-  it('招牌菜：用高汤补过差额，就算满足条件', () => {
-    const p = player({ tokens: { stock: 1 }, bonus: ['sugar', 'sugar', 'sugar', 'chili', 'chili', 'chili', 'vinegar'] });
-    expect(payment(p, duck2)).toMatchObject({ vinegar: 0, stock: 1 });
-  });
-
-  it('招牌菜：折扣全抵掉时，自动多付 3 个所需调味（从最多的开始）', () => {
-    const p = player({ tokens: { sugar: 1, chili: 4, soy: 5 }, bonus: lotsOfBonus });
-    // 酱油不是这道菜的调味，不能用来补；辣椒最多 3 个（不超过价格）
-    expect(payment(p, duck2)).toMatchObject({ chili: 3, sugar: 0, soy: 0, stock: 0 });
-  });
-
-  it('招牌菜：折扣只抵掉一部分时，补足到 3 个', () => {
-    const p = player({ tokens: { sugar: 2, chili: 2 }, bonus: ['sugar', 'sugar', 'chili', 'chili', 'chili', 'vinegar', 'vinegar'] });
-    // 正常只需付糖 1，再补 2 个
-    const pay = payment(p, duck2);
-    expect(pay.sugar + pay.chili + pay.vinegar).toBe(3);
-    expect(pay.stock).toBe(0);
-  });
-
-  it('招牌菜：所需调味补不够 3 个，自动改付 1 个高汤', () => {
-    const p = player({ tokens: { sugar: 1, soy: 5, stock: 2 }, bonus: lotsOfBonus });
-    expect(payment(p, duck2)).toMatchObject({ sugar: 0, stock: 1 });
-  });
-
-  it('招牌菜：可以指定付高汤，而不是 3 个调味', () => {
-    const p = player({ tokens: { chili: 4, stock: 1 }, bonus: lotsOfBonus });
-    expect(payment(p, duck2, 'stock')).toMatchObject({ chili: 0, stock: 1 });
-  });
-
-  it('招牌菜：可以指定付哪 3 个调味', () => {
-    const p = player({ tokens: { sugar: 2, chili: 4 }, bonus: lotsOfBonus });
-    expect(payment(p, duck2, { sugar: 2, chili: 1 })).toMatchObject({ sugar: 2, chili: 1 });
-  });
-
-  it('招牌菜：指定的调味不够 3 个，买不了', () => {
-    const p = player({ tokens: { sugar: 2, chili: 4 }, bonus: lotsOfBonus });
-    expect(payment(p, duck2, { sugar: 2 })).toBeNull();
-  });
-
-  it('招牌菜：不能用这道菜不需要的调味来补', () => {
-    const p = player({ tokens: { soy: 5 }, bonus: lotsOfBonus });
-    expect(payment(p, duck2, { soy: 3 })).toBeNull();
-  });
-
-  it('招牌菜：调味和高汤都凑不出来，买不了', () => {
-    const p = player({ tokens: { sugar: 1, soy: 5 }, bonus: lotsOfBonus });
-    expect(payment(p, duck2)).toBeNull();
+  it('三级菜差的部分用高汤补，不用额外多付', () => {
+    const p = player({ tokens: { sugar: 1, stock: 2 }, bonus: ['sugar'] });
+    expect(payment(p, duck)).toMatchObject({ sugar: 1, stock: 1 });
   });
 
   it('二级菜全抵掉可以免费买', () => {
@@ -177,7 +129,7 @@ describe('buy（行动）', () => {
     expect(client.getState().ctx.currentPlayer).toBe('0');
   });
 
-  it('买招牌菜：折扣全抵掉时补付 3 个调味，退回桌上', () => {
+  it('买三级菜：折扣全抵掉时什么都不用付，手里的调味不动', () => {
     const roast = { id: 'R', tier: 3, bonus: 'soy', points: 4, cost: { sugar: 3, chili: 3 } };
     const client = clientWith(G => {
       G.market[3][0] = roast;
@@ -186,11 +138,11 @@ describe('buy（行动）', () => {
       Object.assign(G.players['0'].tokens, { sugar: 2, chili: 2 });
       G.bank.sugar -= 2; G.bank.chili -= 2;
     });
-    client.moves.buy(3, 0, { sugar: 2, chili: 1 });
+    client.moves.buy(3, 0);
     const { G } = client.getState();
 
-    expect(G.players['0'].tokens).toMatchObject({ sugar: 0, chili: 1 });
-    expect(G.bank.sugar).toBe(10);
-    expect(G.bank.chili).toBe(9);
+    expect(G.players['0'].cards.map(c => c.id)).toContain('R');
+    expect(G.players['0'].tokens).toMatchObject({ sugar: 2, chili: 2 });
+    expect(G.bank.sugar).toBe(8);
   });
 });

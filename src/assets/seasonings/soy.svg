@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="酱油">
+<defs>
+  <filter id="wc" x="-20%" y="-20%" width="140%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="23" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" result="d"/>
+    <feGaussianBlur in="d" stdDeviation="0.5" result="b"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="7" result="grain"/>
+    <feColorMatrix in="grain" type="saturate" values="0" result="gray"/>
+    <feComponentTransfer in="gray" result="paper">
+      <feFuncR type="linear" slope="0.35" intercept="0.72"/>
+      <feFuncG type="linear" slope="0.35" intercept="0.72"/>
+      <feFuncB type="linear" slope="0.35" intercept="0.72"/>
+    </feComponentTransfer>
+    <feComposite in="paper" in2="b" operator="in" result="paperIn"/>
+    <feBlend in="b" in2="paperIn" mode="multiply"/>
+  </filter>
+  <filter id="splash" x="-30%" y="-30%" width="160%" height="160%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="4" seed="23" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="38" xChannelSelector="R" yChannelSelector="G" result="d"/>
+    <feGaussianBlur in="d" stdDeviation="2"/>
+  </filter>
+</defs>
+  <circle cx="100" cy="108" r="72" fill="#e8c9a8" opacity=".45" filter="url(#splash)"/>
+  <g filter="url(#wc)" stroke-linejoin="round">
+
+    <!-- 瓶身 -->
+    <path d="M88,46 L112,46 L112,70 C112,82 138,88 138,104 L138,168 Q138,180 126,180 L74,180 Q62,180 62,168 L62,104 C62,88 88,82 88,70 Z"
+          fill="#4a2a1a" stroke="#2a160c" stroke-width="2.5"/>
+    <path d="M70,104 L70,160" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".35"/>
+    <path d="M95,52 L95,72" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".35"/>
+    <!-- 红盖子 -->
+    <rect x="85" y="28" width="30" height="20" rx="5" fill="#d64236" stroke="#8f2219" stroke-width="2.5"/>
+    <path d="M90,34 L110,34" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".5"/>
+    <!-- 标签 -->
+    <rect x="70" y="110" width="60" height="54" rx="9" fill="#fff4dc" stroke="#b48a52" stroke-width="2"/>
+
+  <g class="face">
+    <ellipse cx="84.6" cy="137.8" rx="6.6000000000000005" ry="3.8500000000000005" fill="#ff8f8f" opacity=".55"/>
+    <ellipse cx="115.4" cy="137.8" rx="6.6000000000000005" ry="3.8500000000000005" fill="#ff8f8f" opacity=".55"/>
+    <circle cx="90.1" cy="129" r="3.9600000000000004" fill="#2b1d16"/>
+    <circle cx="109.9" cy="129" r="3.9600000000000004" fill="#2b1d16"/>
+    <circle cx="91.41999999999999" cy="127.57" r="1.32" fill="#fff"/>
+    <circle cx="111.22" cy="127.57" r="1.32" fill="#fff"/>
+    <path d="M94.5,136.7 Q100,142.2 105.5,136.7"
+          fill="none" stroke="#2b1d16" stroke-width="2.4200000000000004" stroke-linecap="round"/>
+  </g>
+    <text x="100" y="158" text-anchor="middle" font-size="11" font-weight="700" fill="#8f2219"
+          font-family="'PingFang SC','Microsoft YaHei',sans-serif">酱油</text>
+
+  </g>
+</svg>

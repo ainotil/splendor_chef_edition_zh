@@ -18,4 +18,9 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
+  {
+    // 命令行脚本（模拟、导入素材）跑在 Node 里
+    files: ['scripts/**/*.{js,mjs}', 'server/**/*.js', 'vite.config.js'],
+    languageOptions: { globals: globals.node },
+  },
 ])

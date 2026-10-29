@@ -1,10 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { Client } from 'boardgame.io/client';
 import { ChefsTable } from './game.js';
+import { hotseat } from './testing.js';
 import { tokenCount } from './state.js';
 
 function newClient() {
-  return Client({ game: { ...ChefsTable, seed: 'test' }, numPlayers: 5 });
+  return Client({ game: hotseat(ChefsTable), numPlayers: 5 });
 }
 
 // 按座位补偿 0/1/1/2/2，替 5 个人完成开局（从 5 号位开始）
