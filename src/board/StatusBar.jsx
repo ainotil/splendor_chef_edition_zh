@@ -30,7 +30,9 @@ export function StatusBar({ G, ctx, me, player, stage, sel, myTurn, online, conn
   } else if (!myTurn) {
     content = G.thief
       ? <>等 {G.thief.pending.map(seatOf).join('、')} 把调味交给 {turnName}…</>
-      : <>等 {turnName} {ctx.phase === 'draft' ? '挑家常菜' : '行动'}…</>;
+      : G.ai.includes(ctx.currentPlayer)
+        ? <>电脑 {turnName} 思考中…</>
+        : <>等 {turnName} {ctx.phase === 'draft' ? '挑家常菜' : '行动'}…</>;
   } else if (ctx.phase === 'draft') {
     content = <>{name} 挑选家常菜，并领取开局调味</>;
   } else if (stage === 'discard') {

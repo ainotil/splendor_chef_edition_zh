@@ -11,6 +11,8 @@
 
 第一次打开大厅可能要等半分钟：免费服务器没人用时会休眠。刷新页面会回到自己的座位。
 
+**单人版**（和电脑玩）：首页选人数和自己的座位，点 **开始单人游戏**。其余座位由电脑接手，每步停顿不到 1 秒，让你看清它做了什么。电脑和数值模拟用的是同一个贪心机器人：会算账，但不会故意卡你的牌。
+
 **同屏版**（一台电脑轮流玩）：首页选人数，点 **开始同屏游戏**。
 
 **不会玩？** 游戏里点右上角的 **?**，有 8 步图文教程；完整规则见[规则说明书](rules.md)。
@@ -45,6 +47,7 @@ VITE_SERVER_URL=http://localhost:8765 npm run dev       # 终端 2
 | 天使的持续技能 | `src/game/state.js`（`fridgeLimit`、`maxReserved` 等） | `npm test` |
 | 恶魔 / 到来时的效果 | `src/game/skills.js` | `npm test` |
 | 四种行动、付款 | `src/game/moves.js`、`state.js` 的 `payment` | `npm test` |
+| 电脑玩家的策略 | `src/game/bot.js`（模拟脚本也用它） | `npm test`，再 `npm run simulate` 看数据有没有变 |
 | 新手教程文字 | `src/board/Help.jsx` | `npm run dev` 看一眼 |
 
 提交前跑一次 `npm run check`（lint + 测试 + 打包），和 CI 跑的一样。

@@ -19,7 +19,7 @@
 
 | 命令 | 作用 |
 | --- | --- |
-| `npm run dev` | 启动开发服务器，同屏试玩 |
+| `npm run dev` | 启动开发服务器，单人或同屏试玩 |
 | `npm test` | 跑一遍全部测试 |
 | `npm run test:watch` | 改代码时自动重跑测试 |
 | `npm run lint` | ESLint 检查 |
@@ -42,6 +42,7 @@ src/
     moves.js         正式游戏的行动：拿 3 个 / 拿 2 个 / 预订 / 购买 / 冰箱弃牌
     skills.js        主厨：请主厨、恶魔和"到来时"天使的效果、偷味 / 撤菜环节
     turn.js          回合收尾：行动 → 弃牌 → 选主厨 → 结束回合
+    bot.js           电脑玩家（贪心机器人）：单人模式和数值模拟共用
     game.js          boardgame.io 游戏定义：setup、阶段、环节、回合顺序、终局、playerView
     testing.js       测试辅助函数
     *.test.js        Vitest 测试
@@ -57,11 +58,11 @@ src/
     labels.js        代币中文名、颜色、图标
   assets/            调料图标
   online.js          联网大厅：连服务器、带密码建房 / 加入、记住上一局
-  App.jsx            首页和路由：同屏 / 联网大厅 / 对局
+  App.jsx            首页和路由：单人 / 同屏 / 联网大厅 / 对局
 server/
   index.js           联网服务器（boardgame.io Server）
 scripts/
-  simulate.js        数值模拟（贪心机器人批量对局）
+  simulate.js        数值模拟（bot.js 坐满所有座位批量对局）
   *.py               调料图标的生成和导入
 docs/                快速开始、规则说明书、上云说明书、策划案
 ```

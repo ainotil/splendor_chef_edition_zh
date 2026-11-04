@@ -1,4 +1,5 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { botMove, playBotMove } from '../game/bot.js';
 import { SEAT_NAMES } from './labels.js';
 import { HelpContext, LeaveContext } from './helpContext.js';
 import { Flights } from './Flights.jsx';
@@ -13,23 +14,26 @@ import './board.css';
 //   中间：三行市场（左边牌堆）| 调味堆 | 主厨 ；右侧：所有玩家
 //   底部信息栏
 // 操作方式：先点选（调味 / 食谱 / 牌堆 / 自己的预订），再在状态栏里确认
-export function Board({ G, ctx, moves, undo, playerID, isMultiplayer, isConnected, matchData, matchID }) {
-  // 同屏模式没有固定的 playerID，"我"就是当前行动的玩家；联网时"我"是自己的座位
-  const me = playerID ?? ctx.currentPlayer;
+export function Board({ G, ctx, moves, events, undo, playerID, isMultiplayer, isConnected, matchData, matchID }) {
+  // "我"：联网时是自己的座位；单人模式固定是真人的座位（G.viewer）；同屏模式是当前行动的玩家
+  const me = playerID ?? G.viewer ?? ctx.currentPlayer;
   const seat = ctx.playOrder.indexOf(me);
   const stage = ctx.activePlayers?.[me];
   const player = G.players[me];
   const playing = ctx.phase === 'play';
   const myTurn = ctx.currentPlayer === me;
   const canAct = playing && myTurn && !stage;
-  // 联网时：每个座位的玩家名字；还有人没进房间就先显示等候室
-  const names = Object.fromEntries((matchData ?? []).map(m => [String(m.id), m.name]));
+  // 每个座位的名字：联网时是玩家起的名字，单人模式标出电脑；还有人没进房间就先显示等候室
+  const names = G.ai.length
+    ? Object.fromEntries(ctx.playOrder.map(id => [id, G.ai.includes(id) ? '电脑' : '你']))
+    : Object.fromEntries((matchData ?? []).map(m => [String(m.id), m.name]));
   const waitingFor = isMultiplayer ? (matchData ?? []).filter(m => !m.name).length : 0;
 
   // 当前选中的东西；换回合后自动作废
   const [picked, setPicked] = useState(null);
   const sel = canAct && picked?.turn === ctx.turn ? picked : null;
   const select = s => setPicked(s && { ...s, turn: ctx.turn });
+  useBots(G, ctx, moves, events);
 
   if (ctx.gameover) return <GameOver result={ctx.gameover} />;
   if (waitingFor > 0) return <WaitingRoom matchData={matchData} matchID={matchID} me={me} />;
@@ -81,4 +85,15 @@ function InfoBar() {
       {leave && <button className="link" onClick={() => window.confirm('离开这一局，回到首页？') && leave()}>离开这一局</button>}
     </footer>
   );
+}
+
+// 单人模式：轮到电脑（或电脑要交调味）时，停一下再替它走一步，让真人看得清发生了什么
+const BOT_DELAY = 800;
+function useBots(G, ctx, moves, events) {
+  useEffect(() => {
+    const id = G.ai.find(id => botMove(G, ctx, id));
+    if (id === undefined) return;
+    const timer = setTimeout(() => playBotMove(botMove(G, ctx, id), moves, events), BOT_DELAY);
+    return () => clearTimeout(timer);
+  }, [G, ctx, moves, events]);
 }

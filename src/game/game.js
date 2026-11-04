@@ -9,6 +9,8 @@ import { draftPhase } from './draft.js';
 // setupData（可选）：
 //   rules    覆盖按人数取的数值，模拟测试不同数值时用
 //   hotseat  同屏模式（一台电脑轮流玩）：不隐藏信息，偷味恶魔可以替别人点
+//   ai       单人模式：哪些座位是电脑，例如 ['1', '2']（由 bot.js 代为行动）
+//   viewer   单人模式：屏幕固定从哪个座位看（真人的座位），别人的暗牌和预订显示为牌背
 export function setup({ ctx, random }, setupData) {
   // 0. 这一局的数值：按人数取，存进 G，招式和界面都从 G.rules 读
   const rules = { ...rulesFor(ctx.numPlayers), ...setupData?.rules };
@@ -47,6 +49,8 @@ export function setup({ ctx, random }, setupData) {
   return {
     rules, bank, decks, market, starters, chefs, players,
     hotseat: !!setupData?.hotseat,
+    ai: setupData?.ai ?? [],
+    viewer: setupData?.viewer ?? null,
     chefTakenThisTurn: false,   // 每回合最多请 1 位主厨
     thief: null,                // 偷味恶魔结算中：{ by, pending: [还没交调味的玩家] }
     priceHike: null,            // 涨价恶魔生效中：{ by, roundsLeft }，每到 by 的回合开始减 1，到 0 取消

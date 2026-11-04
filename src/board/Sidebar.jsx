@@ -22,8 +22,8 @@ function PlayerPanel({ G, id, seat, turn, mine, name, online, stage, sel, active
   const p = G.players[id];
   const b = bonuses(p);
   const discarding = stage === 'discard';
-  // 偷味恶魔：轮到这位交 1 个调味。联网时只有本人能点，同屏时谁都能点
-  const giving = !!G.thief?.pending.includes(id) && (G.hotseat || mine);
+  // 偷味恶魔：轮到这位交 1 个调味。联网时只有本人能点，同屏时谁都能点（电脑的座位由电脑自己交）
+  const giving = !!G.thief?.pending.includes(id) && (mine || (G.hotseat && !G.ai.includes(id)));
   const count = tokenCount(p);
   const limit = fridgeLimit(G, p);
 
@@ -37,7 +37,7 @@ function PlayerPanel({ G, id, seat, turn, mine, name, online, stage, sel, active
     <section ref={ref} className={`player ${turn ? 'current' : ''} ${discarding || giving ? 'discarding' : ''}`} data-anchor={`p${id}`}>
       <div className="player-head">
         <span className="player-name">{SEAT_NAMES[seat]}</span>
-        {online && <span className="player-nick">{name}{mine && '（你）'}</span>}
+        {name && <span className="player-nick">{name}{online && mine && '（你）'}</span>}
         <span className="player-score" title="口碑">★ {score(p)}</span>
         <span className={`player-fridge ${count > limit ? 'over' : ''}`} title="冰箱：调味 + 高汤">
           冰箱 {count}/{limit}
