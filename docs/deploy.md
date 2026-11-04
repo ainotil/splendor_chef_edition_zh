@@ -11,6 +11,7 @@
 - 网页打包时写死服务器地址（`VITE_SERVER_URL`）。没配地址的网页只有同屏模式。
 - 服务器用 `API_SECRET` 当房间密码：建房、加入、查看房间都要带上，不知道密码的人进不来。
 - 服务器只接受 `ALLOWED_ORIGINS` 里的网页连接。
+- 除了 boardgame.io 自带的房间接口，`server/index.js` 还加了一个 `POST /games/chefs-table/:id/dissolve`：房主在人到齐前解散房间。它同样要带密码，并校验房主的凭证。
 
 ## 需要准备
 

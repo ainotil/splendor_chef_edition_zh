@@ -35,6 +35,21 @@ export async function joinRoom(password, matchID, playerID, playerName) {
   return playerCredentials;
 }
 
+// 离开还在等人的房间：让出自己的座位（最后一个人离开时服务器会删掉房间）
+export async function leaveRoom(password, matchID, playerID, credentials) {
+  await lobby.leaveMatch(GAME, matchID, { playerID, credentials }, withPassword(password));
+}
+
+// 房主解散房间（server/index.js 里自己加的接口）
+export async function dissolveRoom(password, matchID, playerID, credentials) {
+  const res = await fetch(`${SERVER}/games/${GAME}/${matchID}/dissolve`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'api-secret': password },
+    body: JSON.stringify({ playerID, credentials }),
+  });
+  if (!res.ok) throw new Error(`HTTP status ${res.status}`);
+}
+
 // 叫醒睡着的免费服务器（不需要密码）
 export function wakeServer() {
   if (SERVER) fetch(`${SERVER}/health`, { mode: 'no-cors' }).catch(() => {});

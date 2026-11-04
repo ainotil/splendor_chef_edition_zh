@@ -28,5 +28,29 @@ server.app.use(async (ctx, next) => {
   await next();
 });
 
+// 房主（1 号位）解散还在等人的房间：整个房间删掉，其他人的等候室查不到房间就会回首页。
+// boardgame.io 只有"离开"（让出自己的座位），没有"解散"。挂在它的 router 上，
+// 这样和自带接口一样要过 CORS 和 api-secret 检查（run() 时才挂上，所以要在 run() 之前加）
+server.router.post('/games/:name/:id/dissolve', async (ctx) => {
+  const { playerID, credentials } = await readJson(ctx.req);
+  const matchID = ctx.params.id;
+  const { metadata } = await server.db.fetch(matchID, { metadata: true });
+  if (!metadata) ctx.throw(404, '没有这个房间');
+  if (playerID !== '0') ctx.throw(403, '只有房主能解散房间');
+  if (!(await server.auth.authenticateCredentials({ playerID, credentials, metadata }))) ctx.throw(403, '凭证不对');
+  if (Object.values(metadata.players).every(p => p.name)) ctx.throw(409, '人已到齐，游戏已经开始，不能解散');
+  await server.db.wipe(matchID);
+  ctx.body = {};
+});
+
+function readJson(req) {
+  return new Promise((resolve, reject) => {
+    let text = '';
+    req.on('data', chunk => { text += chunk; });
+    req.on('end', () => { try { resolve(JSON.parse(text || '{}')); } catch (e) { reject(e); } });
+    req.on('error', reject);
+  });
+}
+
 const port = Number(process.env.PORT ?? 8000);
 server.run(port, () => console.log(`主厨餐桌服务器已启动：端口 ${port}，允许的网页：${origins.join(', ')}`));
