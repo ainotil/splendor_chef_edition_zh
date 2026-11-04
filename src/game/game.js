@@ -2,10 +2,8 @@ import { RECIPES } from './data/recipes.js';
 import { CHEFS } from './data/chefs.js';
 import { COLORS, MARKET_SIZE, rulesFor } from './constants.js';
 import { newPlayer, score, ranking, winners } from './state.js';
-import {
-  takeThree, takeTwo, reserve, reserveFromDeck, buy, buyReserved,
-  discard, chooseChef, skipChef, giveToThief, clearRow,
-} from './moves.js';
+import { takeThree, takeTwo, reserve, reserveFromDeck, buy, buyReserved, discard } from './moves.js';
+import { chooseChef, skipChef, giveToThief, clearRow } from './skills.js';
 import { draftPhase } from './draft.js';
 
 // setupData（可选）：

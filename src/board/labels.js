@@ -1,3 +1,4 @@
+import { COLORS } from '../game/constants.js';
 import sugar from '../assets/seasonings/sugar.webp';
 import soy from '../assets/seasonings/soy.webp';
 import chili from '../assets/seasonings/chili.webp';
@@ -17,3 +18,6 @@ export const TOKEN_INFO = {
 };
 
 export const SEAT_NAMES = ['1 号位', '2 号位', '3 号位', '4 号位', '5 号位'];
+
+// 五种调味 + 高汤，界面里按这个顺序排
+export const ALL_TOKENS = [...COLORS, 'stock'];
